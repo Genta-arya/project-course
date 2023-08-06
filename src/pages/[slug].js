@@ -19,9 +19,7 @@ export default function Dinamis({ data }) {
     return (
       <main
         className={`flex min-h-screen max-w-2xl m-auto flex-col items-center p-4 pt-24 ${inter.className}`}
-      >
-     
-      </main>
+      ></main>
     );
   }
   return (
@@ -44,22 +42,34 @@ export default function Dinamis({ data }) {
       </div>
       <div className="flex flex-col items-center gap-8 w-full">
         {data.attributes.links.data.map((value, index) => {
+          const isAccountSuspended = value.attributes.status === "suspend";
           const isAccountActive = value.attributes.status === "active";
 
-          return (
-            <a
-              key={index}
-              className={`h-full w-full bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-30 rounded-[24px] p-4 hover:scale-105 transition-all cursor-pointer ${
-                !isAccountActive ? "opacity-50 pointer-events-none" : ""
-              }`}
-              href={value.attributes.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              disabled={!isAccountActive}
-            >
-              {value.attributes.title}
-            </a>
-          );
+          if (isAccountSuspended) {
+            return (
+              <button
+                key={index}
+                className="h-full w-full bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-5 rounded-[24px] p-4  cursor-not-allowed"
+                disabled
+              >
+                {value.attributes.title}
+              </button>
+            );
+          } else if (isAccountActive) {
+            return (
+              <a
+                key={index}
+                className={`h-full w-full bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-30 rounded-[24px] p-4 hover:scale-105 transition-all cursor-pointer`}
+                href={value.attributes.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {value.attributes.title}
+              </a>
+            );
+          }
+
+          return null;
         })}
       </div>
     </main>
